@@ -1,0 +1,20 @@
+mutation chargeCard($paymentInput: Any!) {
+    chargeCard(paymentInput: $paymentInput) {
+        firstname
+        lastname
+        email
+        phone
+        address
+        country
+        town
+        postalcode
+        carditems {
+            id
+            name
+            price
+            quantity
+        }
+        paymentInfos
+        charge
+    }
+}

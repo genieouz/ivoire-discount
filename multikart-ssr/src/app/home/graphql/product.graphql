@@ -1,0 +1,68 @@
+query FetchProducts {
+    fetchProducts {
+        id
+        name
+        description
+        price
+        type
+        quota
+        category {
+            name
+        }
+        cover {
+            id
+        }
+        gallery {
+            id
+        }
+        variants
+    }
+}
+
+query FetchCategoryByName($categoryName: String!) {
+    fetchCategoryByName(categoryName: $categoryName) {
+        id
+        name
+        parent {
+            id
+            name
+        }
+        createdAt
+        minPrice
+        maxPrice
+    }
+}
+
+query FetchCategoriesForMarket {
+    fetchCategoriesForMarket {
+        id
+        name
+        price
+        minPrice
+        maxPrice
+        status
+        parent {
+            id
+            name
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+query FetchMainCategoriesForMarket {
+    fetchMainCategoriesForMarket {
+        id
+        name
+        price
+        minPrice
+        maxPrice
+        status
+        children {
+            id
+            name
+        }
+        createdAt
+        updatedAt
+    }
+}
