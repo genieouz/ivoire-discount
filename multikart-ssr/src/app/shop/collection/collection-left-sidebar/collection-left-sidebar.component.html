@@ -34,15 +34,15 @@
                         </div>
                         <!-- silde-bar colleps block end here -->
                         <!-- side-bar single product slider start -->
-                        <app-product-box-vertical-slider [title]="'New Products'">
-                        </app-product-box-vertical-slider>
+                        <!-- <app-product-box-vertical-slider [title]="'New Products'">
+                        </app-product-box-vertical-slider> -->
                         <!-- side-bar single product slider end -->
                         <!-- side-bar banner start here -->
-                        <div class="collection-sidebar-banner">
+                        <!-- <div class="collection-sidebar-banner">
                             <a [routerLink]="['/shop/collection/left/sidebar']">
                                 <img src="assets/images/collection-sidebar-banner.png" class="img-fluid" alt="banner">
                             </a>
-                        </div>
+                        </div> -->
                         <!-- side-bar banner end here -->
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                                     </li>
                                     <li class="clear_filter" *ngIf="tags.length > 0">
                                         <a href="javascript:void(0)" class="clear_filter" (click)="removeAllTags()">
-                                            Clear all
+                                            Effacer tout
                                         </a>
                                     </li>
                                 </ul>
@@ -96,9 +96,9 @@
                                             </div>
                                             <div class="col-sm-12 text-center section-b-space mt-5 no-found" *ngIf="!products.length">
                                                 <img src="assets/images/empty-search.jpg" class="img-fluid mb-4">
-                                                <h3>Sorry! Couldn't find the product you were looking For!!! </h3>
-                                                <p>Please check if you have misspelt something or try searching with other words.</p>
-                                                <a [routerLink]="['/shop/collection/left/sidebar']" class="btn btn-solid">continue shopping</a>
+                                                <h3>Désolé, nous n'avons pas trouvé le produit que vous cherchez!!! </h3>
+                                                <p>Veuillez vérifier si vous avez bien écris vos mots de recherche.</p>
+                                                <a [routerLink]="['/shop/collection/left/sidebar']" class="btn btn-solid">Continuez votre achat</a>
                                             </div>
                                         </div>
                                     </div>

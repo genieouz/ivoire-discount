@@ -1,0 +1,38 @@
+query FetchForumMessages {
+    fetchForumMessages {
+        id
+        content 
+        postedBy
+        subject
+        createdAt
+        comments {
+            postedBy
+            content
+            createdAt
+        }
+    }
+}
+
+mutation CreateForumMessage($forumMessageInput: ForumMessageInput!) {
+    createForumMessage(forumMessageInput: $forumMessageInput) {
+        id
+        content 
+        postedBy
+        subject
+        createdAt
+        comments {
+            postedBy
+            content
+            createdAt
+        }
+    }
+}
+
+mutation CreateComment($commentInput: CommentInput!) {
+    createComment(commentInput: $commentInput) {
+        content 
+        postedBy
+        discussionId
+        createdAt
+    }
+}

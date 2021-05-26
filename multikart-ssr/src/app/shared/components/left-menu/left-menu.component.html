@@ -13,7 +13,7 @@
       <ul id="sub-menu" class="sidebar-menu">
         <li *ngFor="let menuItem of menuItems" (mouseover)="onHover(menuItem.children ? true : false)">
             <!-- Sub -->
-            <a href="javascript:void(0)" *ngIf="menuItem.type === 'sub'" 
+            <a [routerLink]="[menuItem.path]" [queryParams]="menuItem.queryParams" *ngIf="menuItem.type === 'sub'" 
                 (click)="toggletNavActive(menuItem)">
                {{menuItem.title}}
                <span class="sub-arrow"  *ngIf="menuItem.children"></span>

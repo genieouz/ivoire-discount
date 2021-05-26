@@ -48,10 +48,10 @@ export type Category = {
   owner: Scalars['ID'];
   parent?: Maybe<Category>;
   status: CategoryStatus;
+  children: Array<Category>;
   price: Scalars['Float'];
   minPrice: Scalars['Float'];
   maxPrice: Scalars['Float'];
-  children: Array<Category>;
 };
 
 export type CategoryInput = {
@@ -83,6 +83,21 @@ export type ClientFilterInput = {
   orderBy?: Maybe<OrderByInput>;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  discussionId: Scalars['String'];
+  content: Scalars['String'];
+  postedBy: Scalars['String'];
+};
+
+export type CommentInput = {
+  discussionId: Scalars['String'];
+  content: Scalars['String'];
+  postedBy: Scalars['String'];
+};
+
 
 export type DiscussionMessage = {
   __typename?: 'DiscussionMessage';
@@ -91,6 +106,23 @@ export type DiscussionMessage = {
 
 export type DiscussionMessageInput = {
   id: Scalars['String'];
+};
+
+export type ForumMessage = {
+  __typename?: 'ForumMessage';
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  subject: Scalars['String'];
+  content: Scalars['String'];
+  postedBy: Scalars['String'];
+  comments: Array<Comment>;
+};
+
+export type ForumMessageInput = {
+  subject: Scalars['String'];
+  content: Scalars['String'];
+  postedBy: Scalars['String'];
 };
 
 export type GqlTimestamp = {
@@ -134,8 +166,12 @@ export type Mutation = {
   updateDiscussionMessage: DiscussionMessage;
   removeDiscussionMessage: Scalars['Boolean'];
   chargeCard: Payment;
-  updatePayment: Payment;
-  removePayment: Scalars['Boolean'];
+  createForumMessage: ForumMessage;
+  updateForumMessage: ForumMessage;
+  removeForumMessage: Scalars['Boolean'];
+  createComment: Comment;
+  updateComment: Comment;
+  removeComment: Scalars['Boolean'];
 };
 
 
@@ -245,14 +281,35 @@ export type MutationChargeCardArgs = {
 };
 
 
-export type MutationUpdatePaymentArgs = {
-  paymentInput: UpdatePaymentInput;
-  paymentId: Scalars['ID'];
+export type MutationCreateForumMessageArgs = {
+  forumMessageInput: ForumMessageInput;
 };
 
 
-export type MutationRemovePaymentArgs = {
-  paymentId: Scalars['ID'];
+export type MutationUpdateForumMessageArgs = {
+  forumMessageInput: UpdateForumMessageInput;
+  forumMessageId: Scalars['ID'];
+};
+
+
+export type MutationRemoveForumMessageArgs = {
+  forumMessageId: Scalars['ID'];
+};
+
+
+export type MutationCreateCommentArgs = {
+  commentInput: CommentInput;
+};
+
+
+export type MutationUpdateCommentArgs = {
+  commentInput: UpdateCommentInput;
+  commentId: Scalars['ID'];
+};
+
+
+export type MutationRemoveCommentArgs = {
+  commentId: Scalars['ID'];
 };
 
 /** OrderBy direction */
@@ -300,6 +357,21 @@ export type Product = {
   variants?: Maybe<Array<Scalars['Any']>>;
 };
 
+export type ProductBill = {
+  __typename?: 'ProductBill';
+  firstname?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  town?: Maybe<Scalars['String']>;
+  postalcode?: Maybe<Scalars['String']>;
+  cartItem?: Maybe<CardItem>;
+  paymentInfos?: Maybe<Scalars['Any']>;
+  charge?: Maybe<Scalars['Any']>;
+};
+
 export type ProductInput = {
   id: Scalars['String'];
 };
@@ -325,8 +397,11 @@ export type Query = {
   fetchChatMessages: Array<ChatMessage>;
   fetchDiscussionMessage: DiscussionMessage;
   fetchDiscussionMessages: Array<DiscussionMessage>;
-  fetchPayment: Payment;
-  fetchPayments: Array<Payment>;
+  fetchProviderBills: Array<ProductBill>;
+  fetchForumMessage: ForumMessage;
+  fetchForumMessages: Array<ForumMessage>;
+  fetchComment: Comment;
+  fetchComments: Array<Comment>;
 };
 
 
@@ -362,6 +437,11 @@ export type QueryFetchCategoriesArgs = {
 
 export type QueryFetchProductArgs = {
   productId: Scalars['ID'];
+};
+
+
+export type QueryFetchProductsArgs = {
+  categoryId?: Maybe<Scalars['ID']>;
 };
 
 
@@ -405,12 +485,17 @@ export type QueryFetchDiscussionMessagesArgs = {
 };
 
 
-export type QueryFetchPaymentArgs = {
-  paymentId: Scalars['ID'];
+export type QueryFetchForumMessageArgs = {
+  forumMessageId: Scalars['ID'];
 };
 
 
-export type QueryFetchPaymentsArgs = {
+export type QueryFetchCommentArgs = {
+  commentId: Scalars['ID'];
+};
+
+
+export type QueryFetchCommentsArgs = {
   clientFilter: ClientFilterInput;
 };
 
@@ -446,8 +531,17 @@ export type UpdateChatMessageInput = {
   id: Scalars['String'];
 };
 
+export type UpdateCommentInput = {
+  id: Scalars['String'];
+};
+
 export type UpdateDiscussionMessageInput = {
   id: Scalars['String'];
+};
+
+export type UpdateForumMessageInput = {
+  subject: Scalars['String'];
+  content: Scalars['String'];
 };
 
 export type UpdatePasswordDto = {
@@ -503,7 +597,9 @@ export type ChargeCardMutation = (
   ) }
 );
 
-export type FetchProductsQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchProductsQueryVariables = Exact<{
+  categoryId?: Maybe<Scalars['ID']>;
+}>;
 
 
 export type FetchProductsQuery = (
@@ -571,6 +667,51 @@ export type FetchMainCategoriesForMarketQuery = (
   )> }
 );
 
+export type FetchForumMessagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchForumMessagesQuery = (
+  { __typename?: 'Query' }
+  & { fetchForumMessages: Array<(
+    { __typename?: 'ForumMessage' }
+    & Pick<ForumMessage, 'id' | 'content' | 'postedBy' | 'subject' | 'createdAt'>
+    & { comments: Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'postedBy' | 'content' | 'createdAt'>
+    )> }
+  )> }
+);
+
+export type CreateForumMessageMutationVariables = Exact<{
+  forumMessageInput: ForumMessageInput;
+}>;
+
+
+export type CreateForumMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { createForumMessage: (
+    { __typename?: 'ForumMessage' }
+    & Pick<ForumMessage, 'id' | 'content' | 'postedBy' | 'subject' | 'createdAt'>
+    & { comments: Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'postedBy' | 'content' | 'createdAt'>
+    )> }
+  ) }
+);
+
+export type CreateCommentMutationVariables = Exact<{
+  commentInput: CommentInput;
+}>;
+
+
+export type CreateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: (
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'content' | 'postedBy' | 'discussionId' | 'createdAt'>
+  ) }
+);
+
 export const ChargeCardDocument = gql`
     mutation chargeCard($paymentInput: Any!) {
   chargeCard(paymentInput: $paymentInput) {
@@ -605,8 +746,8 @@ export const ChargeCardDocument = gql`
     }
   }
 export const FetchProductsDocument = gql`
-    query FetchProducts {
-  fetchProducts {
+    query FetchProducts($categoryId: ID) {
+  fetchProducts(categoryId: $categoryId) {
     id
     name
     description
@@ -716,6 +857,81 @@ export const FetchMainCategoriesForMarketDocument = gql`
   })
   export class FetchMainCategoriesForMarketGQL extends Apollo.Query<FetchMainCategoriesForMarketQuery, FetchMainCategoriesForMarketQueryVariables> {
     document = FetchMainCategoriesForMarketDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const FetchForumMessagesDocument = gql`
+    query FetchForumMessages {
+  fetchForumMessages {
+    id
+    content
+    postedBy
+    subject
+    createdAt
+    comments {
+      postedBy
+      content
+      createdAt
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class FetchForumMessagesGQL extends Apollo.Query<FetchForumMessagesQuery, FetchForumMessagesQueryVariables> {
+    document = FetchForumMessagesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateForumMessageDocument = gql`
+    mutation CreateForumMessage($forumMessageInput: ForumMessageInput!) {
+  createForumMessage(forumMessageInput: $forumMessageInput) {
+    id
+    content
+    postedBy
+    subject
+    createdAt
+    comments {
+      postedBy
+      content
+      createdAt
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateForumMessageGQL extends Apollo.Mutation<CreateForumMessageMutation, CreateForumMessageMutationVariables> {
+    document = CreateForumMessageDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateCommentDocument = gql`
+    mutation CreateComment($commentInput: CommentInput!) {
+  createComment(commentInput: $commentInput) {
+    content
+    postedBy
+    discussionId
+    createdAt
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateCommentGQL extends Apollo.Mutation<CreateCommentMutation, CreateCommentMutationVariables> {
+    document = CreateCommentDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

@@ -34,29 +34,37 @@ export class ProductService {
     ---------------------------------------------
   */
 
+ private fetchProducts(categoryId?: string): Observable<Product[]> {
+  // this.Products = this.http.get<Product[]>('assets/data/products.json').pipe(map(data => data));
+  // this.Products.subscribe(next => { localStorage['products'] = JSON.stringify(next) });
+  // return this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
+  const categoryFilter = categoryId ? { categoryId  } : {};
+  return new Observable((observer) => {
+    this.fetchProductsGQL.fetch(categoryFilter).subscribe(
+      ({ data }) => {
+        const products = [...data.fetchProducts].reverse().map((product) => { 
+          const gallery = [product.cover, ...product.gallery]
+          const images = gallery.map((image) => {
+            return { id: image.id, src: this.generateImgUrl(image.id), alt: "", image_id: image.id} as unknown
+          })
+          return { ...product, quantity: product.quota, title: product.name, category: product.category.name, images, variants: [] } as unknown
+         });
+         this.Products = products;
+        //  this.Products.subscribe(next => { localStorage['products'] = JSON.stringify(next) });
+        localStorage['products'] = JSON.stringify(products)
+        //  this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
+        observer.next(products as Product[])
+      }
+    )
+  })
+}
+
   // Product
   private get products(): Observable<Product[]> {
     // this.Products = this.http.get<Product[]>('assets/data/products.json').pipe(map(data => data));
     // this.Products.subscribe(next => { localStorage['products'] = JSON.stringify(next) });
     // return this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
-    return new Observable((observer) => {
-      this.fetchProductsGQL.fetch().subscribe(
-        ({ data }) => {
-          const products = [...data.fetchProducts].reverse().map((product) => { 
-            const gallery = [product.cover, ...product.gallery]
-            const images = gallery.map((image) => {
-              return { id: image.id, src: this.generateImgUrl(image.id), alt: "", image_id: image.id} as unknown
-            })
-            return { ...product, quantity: product.quota, title: product.name, category: product.category.name, images, variants: [] } as unknown
-           });
-           this.Products = products;
-          //  this.Products.subscribe(next => { localStorage['products'] = JSON.stringify(next) });
-          localStorage['products'] = JSON.stringify(products)
-          //  this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
-          observer.next(products as Product[])
-        }
-      )
-    })
+    return this.fetchProducts();
   }
 
   // Get Products
@@ -242,8 +250,8 @@ export class ProductService {
   */
 
   // Get Product Filter
-  public filterProducts(filter: any): Observable<Product[]> {
-    return this.products.pipe(map(product => 
+  public filterProducts(filter: any, categoryId?: string): Observable<Product[]> {
+    return this.fetchProducts(categoryId).pipe(map(product => 
       product.filter((item: Product) => {
         if (!filter.length) return true
         const Tags = filter.some((prev) => { // Match Tags

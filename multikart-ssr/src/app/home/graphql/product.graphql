@@ -1,5 +1,5 @@
-query FetchProducts {
-    fetchProducts {
+query FetchProducts($categoryId: ID) {
+    fetchProducts(categoryId: $categoryId) {
         id
         name
         description

@@ -44,7 +44,7 @@
         <ul class="nav-submenu" [class.opensubmenu]="menuItem.active" *ngIf="menuItem.children">
           <li *ngFor="let childrenItem of menuItem.children">
             <!-- Sub -->
-            <a href="javascript:void(0)" *ngIf="childrenItem.type === 'sub'" 
+            <a [routerLink]="[childrenItem.path]" [queryParams]="childrenItem.queryParams" *ngIf="childrenItem.type === 'sub'" 
                 (click)="toggletNavActive(childrenItem)">
               {{ childrenItem.title | translate }}
               <span class="new-tag" *ngIf="childrenItem.badge">{{ childrenItem.badgeText | translate }}</span>

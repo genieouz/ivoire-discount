@@ -45,12 +45,11 @@ export class NavService {
 						const items = category.children.map((child) => {
 							return { path: `/shop/collection/left/sidebar`, queryParams: { category: child.name }, title: child.name, type: 'link' }
 						});
-						return { title: category.name, type: 'sub', active: false, children: items }
+						return { title: category.name, type: 'sub', active: false, children: items, path: `/shop/collection/left/sidebar`, queryParams: { category: category.name } }
 					} else {
 						return { path: `/shop/collection/left/sidebar`, queryParams: { category: category.name }, title: category.name, type: 'link' }
 					}
 				});
-				console.log({items})
 				this.lm.push(...items);
 				this.MENUITEMS.unshift({ title: 'Catégories', type: 'sub', active: false, children: items })
 				// this.leftMenuItems = new BehaviorSubject<Menu[]>(items);
