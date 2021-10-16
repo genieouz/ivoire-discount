@@ -52,12 +52,16 @@ export class ProductService {
          this.Products = products;
         //  this.Products.subscribe(next => { localStorage['products'] = JSON.stringify(next) });
         localStorage['products'] = JSON.stringify(products)
-        //  this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
+          console.log("pros",products)
+
+          //  this.Products = this.Products.pipe(startWith(JSON.parse(localStorage['products'] || '[]')));
         observer.next(products as Product[])
       }
     )
   })
-}
+
+
+ }
 
   // Product
   private get products(): Observable<Product[]> {
@@ -69,7 +73,8 @@ export class ProductService {
 
   // Get Products
   public get getProducts(): Observable<Product[]> {
-    return this.products;
+   return this.products;
+
   }
 
   // Get Products By Slug

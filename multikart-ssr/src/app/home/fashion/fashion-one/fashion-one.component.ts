@@ -110,6 +110,7 @@ export class FashionOneComponent implements OnInit {
   }];
 
   ngOnInit(): void {
+    this.getCollectionProducts("")
   }
 
   // Product Tab collection

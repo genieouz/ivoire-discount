@@ -374,6 +374,8 @@ export type ProductBill = {
 
 export type ProductInput = {
   id: Scalars['String'];
+  name: Scalars['String'];
+  description: Scalars['String'];
 };
 
 export type Query = {

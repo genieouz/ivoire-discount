@@ -15,7 +15,9 @@ export class CollectionComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
   }
+
 
    public CollectionSliderConfig: any = CollectionSlider;
 
