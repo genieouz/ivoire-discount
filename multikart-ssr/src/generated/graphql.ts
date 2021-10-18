@@ -373,9 +373,10 @@ export type ProductBill = {
 };
 
 export type ProductInput = {
-  id: Scalars['String'];
   name: Scalars['String'];
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  price: Scalars['Float'];
+  category?: Maybe<Scalars['ID']>;
 };
 
 export type Query = {
@@ -433,7 +434,7 @@ export type QueryFetchCategoryByNameArgs = {
 
 
 export type QueryFetchCategoriesArgs = {
-  clientFilter: ClientFilterInput;
+  clientFilter?: Maybe<ClientFilterInput>;
 };
 
 
